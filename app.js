@@ -42,6 +42,7 @@ const barEl  = document.getElementById("bar");
 const statEl = document.getElementById("stat");
 
 let state = load();
+let onlyUnknown = false;
 
 function load() {
   try {
@@ -55,16 +56,43 @@ function save() {
   try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
 }
 
-function current() {
-  return WORD_LIST[state.index % WORD_LIST.length];
+function pool() {
+  if (!onlyUnknown) return WORD_LIST;
+  return WORD_LIST.filter(function (w) {
+    return !state.known.includes(w.word);
+  });
 }
+
+function current() {
+  const list = pool();
+  if (list.length === 0) return null;
+  return list[state.index % list.length];
+}
+
+document.getElementById("mode").addEventListener("click", function () {
+  onlyUnknown = !onlyUnknown;
+  state.index = 0;
+  save();
+  render();
+  document.getElementById("mode").textContent = onlyUnknown ? "练全部" : "只练没记住的";
+});
 
 function render() {
   const w = current();
+  card.classList.remove("flipped");
+
+  if (w === null) {
+    wordEl.textContent = "全部记住了";
+    meanEl.textContent = "";
+    egEl.textContent = "点「重来一遍」重新开始";
+    barEl.style.width = "100%";
+    statEl.textContent = WORD_LIST.length + " / " + WORD_LIST.length + " 张已记住";
+    return;
+  }
+
   wordEl.textContent = w.word;
   meanEl.textContent = w.mean;
   egEl.textContent = w.eg;
-  card.classList.remove("flipped");
 
   const pct = Math.round((state.known.length / WORD_LIST.length) * 100);
   barEl.style.width = pct + "%";

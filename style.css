@@ -40,5 +40,5 @@ button{
 button:active{transform:scale(.97)}
 .primary{background:var(--ok);border-color:var(--ok);color:#04120c}
 .ghost{color:var(--muted)}
-footer{text-align:center}
+footer{display:flex;justify-content:center;gap:18px}
 .link{background:none;border:none;color:var(--muted);font-size:13px;text-decoration:underline;flex:0}
