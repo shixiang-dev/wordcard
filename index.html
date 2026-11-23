@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>单词卡</title>
+  <meta name="theme-color" content="#0b1220" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>单词卡</h1>
+    <div class="bar"><i id="bar"></i></div>
+    <p id="stat">0 / 0 张</p>
+  </header>
+
+  <main>
+    <div class="card" id="card">
+      <div class="card-inner">
+        <div class="face front">
+          <span class="word" id="word">hello</span>
+          <span class="hint">点一下翻面</span>
+        </div>
+        <div class="face back">
+          <span class="mean" id="mean">你好</span>
+          <span class="eg" id="eg">Hello, world.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="btns">
+      <button id="again" class="ghost">还不认识</button>
+      <button id="known" class="primary">记住了</button>
+    </div>
+  </main>
+
+  <footer>
+    <button id="reset" class="link">重来一遍</button>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
