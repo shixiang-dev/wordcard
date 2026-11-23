@@ -2,7 +2,7 @@
 
 一个用原生 HTML / CSS / JavaScript 写的单词卡小工具，可以在手机上「添加到主屏幕」当 App 用。
 
-**在线访问：** https://你的用户名.github.io/wordcard/
+**在线访问：** https://shixiang-dev.github.io/wordcard/
 
 ## 功能
 

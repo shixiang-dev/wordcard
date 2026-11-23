@@ -144,7 +144,7 @@ manifest.json
 等 1–2 分钟，刷新这个页面，顶上会出现：
 
 ```
-https://你的用户名.github.io/wordcard/
+https://shixiang-dev.github.io/wordcard/
 ```
 
 **这个链接，别人在任何地方、任何手机上都能打开。** 这就是你的第一个「作品链接」。
@@ -166,7 +166,7 @@ git config --global user.email "你的邮箱"
 
 # 只做一次：把本地文件夹接到 GitHub 仓库
 git init
-git remote add origin https://github.com/你的用户名/wordcard.git
+git remote add origin https://github.com/shixiang-dev/wordcard.git
 
 # 以后每次改完代码，就这三行
 git add .
