@@ -45,20 +45,33 @@ let state = load();
 let onlyUnknown = false;
 
 function load() {
+  const base = { index: 0, known: [], extra: [] };
   try {
     const raw = localStorage.getItem(KEY);
-    if (raw) return JSON.parse(raw);
+    if (raw) {
+      const s = JSON.parse(raw);
+      return { index: s.index || 0, known: s.known || [], extra: s.extra || [] };
+    }
   } catch (e) {}
-  return { index: 0, known: [] };
+  return base;
 }
 
 function save() {
-  try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+  try {
+    localStorage.setItem(KEY, JSON.stringify(state));
+  } catch (e) {
+    alert("保存失败，浏览器没让你存：" + e.name);
+  }
+}
+
+function allWords() {
+  return WORD_LIST.concat(state.extra);
 }
 
 function pool() {
-  if (!onlyUnknown) return WORD_LIST;
-  return WORD_LIST.filter(function (w) {
+  const list = allWords();
+  if (!onlyUnknown) return list;
+  return list.filter(function (w) {
     return !state.known.includes(w.word);
   });
 }
@@ -86,7 +99,7 @@ function render() {
     meanEl.textContent = "";
     egEl.textContent = "点「重来一遍」重新开始";
     barEl.style.width = "100%";
-    statEl.textContent = WORD_LIST.length + " / " + WORD_LIST.length + " 张已记住";
+    statEl.textContent = allWords().length + " / " + allWords().length + " 张已记住";
     return;
   }
 
@@ -94,9 +107,9 @@ function render() {
   meanEl.textContent = w.mean;
   egEl.textContent = w.eg;
 
-  const pct = Math.round((state.known.length / WORD_LIST.length) * 100);
+  const pct = Math.round((state.known.length / allWords().length) * 100);
   barEl.style.width = pct + "%";
-  statEl.textContent = state.known.length + " / " + WORD_LIST.length + " 张已记住";
+  statEl.textContent = state.known.length + " / " + allWords().length + " 张已记住";
 }
 
 card.addEventListener("click", () => card.classList.toggle("flipped"));
@@ -104,21 +117,46 @@ card.addEventListener("click", () => card.classList.toggle("flipped"));
 document.getElementById("known").addEventListener("click", () => {
   const w = current();
   if (!state.known.includes(w.word)) state.known.push(w.word);
-  state.index = (state.index + 1) % WORD_LIST.length;
+  state.index = (state.index + 1) % allWords().length;
   save();
   render();
 });
 
 document.getElementById("again").addEventListener("click", () => {
-  state.index = (state.index + 1) % WORD_LIST.length;
+  state.index = (state.index + 1) % allWords().length;
   save();
   render();
 });
 
 document.getElementById("reset").addEventListener("click", () => {
-  state = { index: 0, known: [] };
+  state = { index: 0, known: [], extra: state.extra };
   save();
   render();
+});
+
+document.getElementById("add").addEventListener("click", function () {
+  document.getElementById("form").classList.toggle("show");
+  const open = document.getElementById("form").classList.contains("show");
+  document.getElementById("add").textContent = open ? "收起" : "＋ 加单词";
+});
+
+document.getElementById("save-word").addEventListener("click", function () {
+  const w = document.getElementById("new-word").value.trim();
+  const m = document.getElementById("new-mean").value.trim();
+  const e = document.getElementById("new-eg").value.trim();
+ if (!w || !m || !e) {
+    alert("单词和释义不能为空");
+    return;
+  }
+  state.extra.push({ word: w, mean: m, eg: e || "（暂无例句）" });
+  state.index = 0;
+  save();
+  render();
+  document.getElementById("new-word").value = "";
+  document.getElementById("new-mean").value = "";
+  document.getElementById("new-eg").value = "";
+  document.getElementById("form").classList.remove("show");
+  document.getElementById("add").textContent = "＋ 加单词";
 });
 
 render();

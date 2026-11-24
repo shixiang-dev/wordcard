@@ -42,3 +42,9 @@ button:active{transform:scale(.97)}
 .ghost{color:var(--muted)}
 footer{display:flex;justify-content:center;gap:18px}
 .link{background:none;border:none;color:var(--muted);font-size:13px;text-decoration:underline;flex:0}
+
+.form{display:none;flex-direction:column;gap:10px;margin-top:2px}
+.form.show{display:flex}
+.form input{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:#0f1a2e;color:var(--text);font-size:16px;outline:none}
+.form input::placeholder{color:var(--muted)}
+.form button{flex:none}
